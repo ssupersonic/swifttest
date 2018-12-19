@@ -12,6 +12,8 @@
 		3877679621CA385D008948F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3877679521CA385D008948F1 /* Assets.xcassets */; };
 		3877679921CA385D008948F1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3877679721CA385D008948F1 /* LaunchScreen.storyboard */; };
 		387767A221CA38A7008948F1 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387767A121CA38A7008948F1 /* MainTableViewController.swift */; };
+		387767A521CA3B82008948F1 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387767A321CA3B82008948F1 /* CustomTableViewCell.swift */; };
+		387767A621CA3B82008948F1 /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 387767A421CA3B82008948F1 /* CustomTableViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		3877679821CA385D008948F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3877679A21CA385D008948F1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		387767A121CA38A7008948F1 /* MainTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MainTableViewController.swift; path = Classes/MainTableViewController.swift; sourceTree = "<group>"; };
+		387767A321CA3B82008948F1 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CustomTableViewCell.swift; path = Classes/CustomTableViewCell.swift; sourceTree = "<group>"; };
+		387767A421CA3B82008948F1 /* CustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = CustomTableViewCell.xib; path = Classes/CustomTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +60,8 @@
 			children = (
 				3877679221CA3859008948F1 /* Main.storyboard */,
 				387767A121CA38A7008948F1 /* MainTableViewController.swift */,
+				387767A321CA3B82008948F1 /* CustomTableViewCell.swift */,
+				387767A421CA3B82008948F1 /* CustomTableViewCell.xib */,
 				387767A021CA386A008948F1 /* Supporting files */,
 				3877679A21CA385D008948F1 /* Info.plist */,
 			);
@@ -132,6 +138,7 @@
 			files = (
 				3877679921CA385D008948F1 /* LaunchScreen.storyboard in Resources */,
 				3877679621CA385D008948F1 /* Assets.xcassets in Resources */,
+				387767A621CA3B82008948F1 /* CustomTableViewCell.xib in Resources */,
 				3877679421CA3859008948F1 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				387767A521CA3B82008948F1 /* CustomTableViewCell.swift in Sources */,
 				387767A221CA38A7008948F1 /* MainTableViewController.swift in Sources */,
 				3877678F21CA3859008948F1 /* AppDelegate.swift in Sources */,
 			);
