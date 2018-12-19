@@ -19,6 +19,7 @@ class CustomTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        //disable user interaction for switch (switch status update on didSelectRowAtIndexPath method)
         self.simpleSwitch.isUserInteractionEnabled = false
     }
     

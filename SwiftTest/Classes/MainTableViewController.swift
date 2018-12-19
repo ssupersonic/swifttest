@@ -23,7 +23,6 @@ struct Hit: Codable {
 
 let url = "https://hn.algolia.com/api/v1/search_by_date?tags=story&page="
 
-
 class MainTableViewController: UITableViewController {
     
     var postList = [Post]()
@@ -32,12 +31,15 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //register custom UITableViewCell
         self.tableView.register(UINib.init(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
         self.navigationItem.title = NSString(string: "0 - Selected posts") as String
         
+        //create refreshControl
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
         
+        //load data from server
         receiveDataFor(page: 0)
     }
     
@@ -46,14 +48,17 @@ class MainTableViewController: UITableViewController {
     }
     
     func receiveDataFor(page: Int) {
+        //check url string
         guard let url = URL(string: "\(url)\(page)") else {
             return
         }
         
+        //create URLSession with url
         let session = URLSession.shared
         session.dataTask(with: url) { (data, response, error) in
             guard let data = data else { return }
             
+            //check server response for error map data
             do {
                 let hits = try JSONDecoder().decode(Hits.self, from: data)
                 self.fillDate(hits: hits)
@@ -61,8 +66,7 @@ class MainTableViewController: UITableViewController {
                 print(error)
             }
             
-            
-            
+            //need update tableView after receive response
             DispatchQueue.main.async {
                 self.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
@@ -71,6 +75,7 @@ class MainTableViewController: UITableViewController {
             }.resume()
     }
     
+    //fill Post model with server data
     func fillDate(hits: Hits) {
         for hit in hits.hits {
             let post = Post(title: hit.title, date: hit.createdAt, status: false)
@@ -87,6 +92,8 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell : CustomTableViewCell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell")! as! CustomTableViewCell
+        
+        //get Post object by indexPath.row
         let post = self.postList[indexPath.row]
         
         cell.titleLabel?.text = post.title
@@ -99,9 +106,11 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
+        //get Post object by indexPath.row
         let post = self.postList[indexPath.row]
         post.status = !post.status
         
+        //update navigation title
         updatePostCountLabel()
         self.tableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.fade)
     }
@@ -115,8 +124,8 @@ class MainTableViewController: UITableViewController {
     }
     
     func updatePostCountLabel() {
+        //get objects with true status
         let filteredArray = self.postList.filter(){ $0.status == true }
-        
         self.navigationItem.title = NSString(string: "\(filteredArray.count) - Selected posts") as String
     }
 }
