@@ -21,20 +21,32 @@ struct Hit: Codable {
     }
 }
 
+let url = "https://hn.algolia.com/api/v1/search_by_date?tags=story&page="
+
+
 class MainTableViewController: UITableViewController {
     
     var postList = [Post]()
+    var currentPage = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.register(UINib.init(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
         self.navigationItem.title = NSString(string: "0 - Selected posts") as String
-        receiveData()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(refresh), for: UIControl.Event.valueChanged)
+        
+        receiveDataFor(page: 0)
     }
     
-    func receiveData() {
-        guard let url = URL(string: "https://hn.algolia.com/api/v1/search_by_date?tags=story&page=1") else {
+    @objc func refresh() {
+        receiveDataFor(page: 0)
+    }
+    
+    func receiveDataFor(page: Int) {
+        guard let url = URL(string: "\(url)\(page)") else {
             return
         }
         
@@ -52,8 +64,10 @@ class MainTableViewController: UITableViewController {
             
             
             DispatchQueue.main.async {
+                self.refreshControl?.endRefreshing()
                 self.tableView.reloadData()
             }
+            
             }.resume()
     }
     
@@ -90,6 +104,14 @@ class MainTableViewController: UITableViewController {
         
         updatePostCountLabel()
         self.tableView.reloadRows(at: [indexPath], with: UITableView.RowAnimation.fade)
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == self.postList.count - 1 {
+            currentPage += 1
+            
+            receiveDataFor(page: currentPage)
+        }
     }
     
     func updatePostCountLabel() {

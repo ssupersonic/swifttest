@@ -8,18 +8,6 @@
 
 import UIKit
 
-class Post {
-    var title: String
-    var date: String
-    var status: Bool
-    
-    init(title: String, date: String, status: Bool) {
-        self.title = title
-        self.date = date
-        self.status = status
-    }
-}
-
 class CustomTableViewCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
