@@ -28,8 +28,29 @@ class MainTableViewController: UITableViewController {
     var postList = [Post]()
     var currentPage = 0
     
+    private let searchController = UISearchController(searchResultsController: nil)
+    private var searchBarIsEmpty: Bool {
+        guard let text = searchController.searchBar.text else {
+            return false
+        }
+        
+        return text.isEmpty
+    }
+    
+    private var filtredPosts = [Post]()
+    private var isFiltering: Bool {
+        return searchController.isActive && !searchBarIsEmpty
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //setup the SearchController
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
         
         //register custom UITableViewCell
         self.tableView.register(UINib.init(nibName: "CustomTableViewCell", bundle: nil), forCellReuseIdentifier: "CustomTableViewCell")
@@ -86,6 +107,9 @@ class MainTableViewController: UITableViewController {
     // MARK: - TableViewDataSource
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering {
+            return filtredPosts.count
+        }
         return self.postList.count
     }
     
@@ -94,7 +118,13 @@ class MainTableViewController: UITableViewController {
         let cell : CustomTableViewCell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell")! as! CustomTableViewCell
         
         //get Post object by indexPath.row
-        let post = self.postList[indexPath.row]
+        var post: Post
+        
+        if isFiltering {
+            post = filtredPosts[indexPath.row]
+        } else {
+            post = postList[indexPath.row]
+        }
         
         cell.titleLabel?.text = post.title
         cell.subtitleLabel?.text = post.date
@@ -127,5 +157,20 @@ class MainTableViewController: UITableViewController {
         //get objects with true status
         let filteredArray = self.postList.filter(){ $0.status == true }
         self.navigationItem.title = NSString(string: "\(filteredArray.count) - Selected posts") as String
+    }
+}
+
+extension MainTableViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text!)
+    }
+    
+    private func filterContentForSearchText(_ searchText: String) {
+    
+        filtredPosts = postList.filter({ (post: Post) -> Bool in
+            return post.title.lowercased().contains(searchText.lowercased())
+        })
+        
+        tableView.reloadData()
     }
 }
